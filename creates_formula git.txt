@@ -1,0 +1,104 @@
+
+CREATE TABLE Equipo (
+    id_equipo INT PRIMARY KEY,
+    nombre VARCHAR(35),
+    pais_origen VARCHAR(20)
+);
+
+
+
+
+
+CREATE TABLE Piloto (
+    id_numero INT PRIMARY KEY,
+    nombre VARCHAR(30),
+    nacionalidad VARCHAR(20),
+    id_equipo INT,
+    CONSTRAINT FK_Piloto_Equipo FOREIGN KEY (id_equipo) REFERENCES Equipo(id_equipo)
+);
+
+
+
+
+
+
+CREATE TABLE Pais (
+    id_pais INT PRIMARY KEY,
+    nombre VARCHAR(30),
+    ciudad VARCHAR(30)
+);
+
+
+
+
+CREATE TABLE Circuito (
+    id_circuito INT PRIMARY KEY,
+    nombre VARCHAR(50),
+    longitud DECIMAL(5, 2),
+    tiempo_estandar VARCHAR(8), 
+    id_pais INT,
+    FOREIGN KEY (id_pais) REFERENCES Pais(id_pais)
+);
+
+
+CREATE TABLE Carrera (
+    clave INT PRIMARY KEY,
+    tipo VARCHAR(10),
+    id_circuito INT,
+    SESION_CLASIFICATORIA varchar(30),
+    FOREIGN KEY (id_circuito) REFERENCES Circuito(id_circuito)
+);
+
+
+
+
+CREATE TABLE Calendario (
+    id_carrera INT,
+    fecha DATE,
+    id_circuito INT,
+    FOREIGN KEY (id_carrera) REFERENCES Carrera(clave),
+    FOREIGN KEY (id_circuito) REFERENCES Circuito(id_circuito),
+    PRIMARY KEY (id_carrera)
+);
+
+
+CREATE TABLE Participacion (
+    posicion INT,
+    id_carrera INT,
+    id_piloto INT,
+    posicion_salida INT,
+    posicion_llegada INT,
+    mejor_tiempo CHAR(11),
+    tiempo_total CHAR(11),
+    puntos_obtenidos INT,
+    estatus_participacion VARCHAR(10),
+    TIEMPO_CLASIFICATORIA CHAR(11),
+    ESTATUS_CLASIFICATORIA VARCHAR2(10),
+    CONSTRAINT PK_Participacion PRIMARY KEY (id_carrera, id_piloto, posicion),
+    FOREIGN KEY (id_carrera) REFERENCES Carrera(clave),
+    FOREIGN KEY (id_piloto) REFERENCES Piloto(id_numero)
+);
+
+
+
+
+
+CREATE TABLE Posiciones (
+    posicion INT,
+    id_piloto INT,
+    id_equipo INT,
+    puntos INT,
+    PRIMARY KEY (posicion, id_piloto, id_equipo),
+    FOREIGN KEY (id_piloto) REFERENCES Piloto(id_numero),
+    FOREIGN KEY (id_equipo) REFERENCES Equipo(id_equipo)
+);
+
+
+
+CREATE TABLE Posiciones_Equipos (
+    posicion INT,
+    id_equipo INT,
+    puntos_totales INT,
+    PRIMARY KEY (posicion, id_equipo, puntos_totales),
+    FOREIGN KEY (id_equipo) REFERENCES Equipo(id_equipo)
+);
